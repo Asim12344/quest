@@ -1,0 +1,254 @@
+/*my custom css*/
+.bg-blue {
+  background-color: #373742;
+  background-image: none;
+  background-size: cover;
+}
+.title-font {
+  font-family: BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+.color-blue {
+  color: #373742 !important;
+}
+
+/*range css*/
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  outline: none !important;
+  appearance: none;
+  border: none;
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+input[type="range"]::-moz-focus-outer {
+  border: 0;
+}
+input[type="range"]:hover {
+  outline: none;
+}
+
+/* Chrome */
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #4caf50;
+  border-radius: 30px;
+  outline: none;
+}
+
+/* Moz */
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #0a194e;
+  /*  border-radius:50%;*/
+  border: none;
+  outline: none;
+}
+input[type="range"]::-moz-range-progress {
+  background-color: #e35303;
+  height: 100%;
+  /*border-radius:30px;*/
+  border: none;
+}
+input[type="range"]::-moz-range-track {
+  background-color: #ccc;
+  /* border-radius:30px;*/
+  border: none;
+  height: 100%;
+}
+
+/* IE*/
+
+input[type="range"]::-ms-fill-lower {
+  background-color: #fff;
+  height: 100%;
+  /*border-radius:30px;*/
+  border: none;
+}
+input[type="range"]::-ms-fill-upper {
+  background-color: #ccc;
+  /*  border-radius:30px;*/
+  border: none;
+  height: 100%;
+}
+/* tooltip style */
+.tooltip_custom {
+  position: relative;
+  padding: 5px 0px 0px 0px;
+}
+
+.tooltip_custom .tooltiptext {
+  width: 100px;
+  background-color: #4caf50;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 40px;
+  left: calc(50% - 50px);
+}
+
+/*.tooltip_custom:hover .tooltiptext {
+  visibility: visible;
+}*/
+
+.tooltip_custom .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #4caf50 transparent transparent transparent;
+  transform: rotate(180deg);
+  top: -9px;
+}
+.zero {
+  z-index: 0;
+  content: "|";
+  position: absolute;
+  top: 100%;
+  left: 27%;
+  margin-left: -5px;
+  top: 6px;
+}
+
+.black_background {
+  background-color: #373742;
+}
+
+.color_white {
+  color: white;
+}
+
+.float-right-custom-padding {
+  padding: 3px 9px;
+}
+.opacity_08 {
+  opacity: 0.8;
+}
+
+.margin_0_auto {
+  margin: 0 auto;
+}
+input[type="range"].green::-moz-range-progress,
+.green {
+  background-color: green !important;
+}
+
+.font_size_08rem {
+  font-size: 0.8rem;
+}
+.margin_left_9per {
+  margin-left: -9%;
+}
+
+.charge_margin {
+  margin-left: calc(100% - 24%);
+}
+
+.text_align_right {
+  text-align: right;
+}
+
+.border-left-black {
+  border-left: 0.25rem solid #373742 !important;
+}
+
+.dropdown_custom_padding {
+  padding: 0.375rem 0.2rem;
+}
+
+.bg_orange {
+  background-color: #e35303;
+}
+
+.bg_green {
+  background-color: #385723;
+}
+.card_border {
+  border-radius: calc(0.35rem - 1px);
+}
+
+/* dashboard.html page css */
+@media screen and (max-width: 1433px) and (min-width: 1177px) {
+  #barchart1 {
+    width: 320px !important;
+    height: 70px !important;
+  }
+
+  #donutchart {
+    width: 350px !important;
+  }
+
+  #barchart2 {
+    width: 600px !important;
+  }
+}
+
+@media screen and (max-width: 1177px) and (min-width: 270px) {
+  #donutchart {
+    width: 310px !important;
+  }
+
+  #barchart1 {
+    width: 250px !important;
+    height: 70px !important;
+  }
+
+  #barchart2 {
+    width: 500px !important;
+  }
+}
+
+@media screen and (max-width: 970px) and (min-width: 756px) {
+  #barchart2 {
+    width: 400px !important;
+  }
+}
+
+@media screen and (max-width: 755px) and (min-width: 270px) {
+  #barchart2 {
+    width: 260px !important;
+  }
+}
+
+@media screen and (max-width: 575px) and (min-width: 350px) {
+  #donutchart {
+    width: 110% !important;
+  }
+  #barchart1 {
+    width: 95% !important;
+    height: 80px !important;
+  }
+}
+
+@media screen and (max-width: 493px) and (min-width: 320px) {
+  #page_title {
+    font-size: 1rem;
+  }
+
+  #reward_divider {
+    display: none;
+  }
+
+  #barchart2 {
+    margin-left: -25px !important;
+    margin-top: 0px !important;
+  }
+}
+/* dashboard.html page css end */

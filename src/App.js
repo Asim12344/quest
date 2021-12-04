@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import Layout from "./hocs/Layout";
+import Login from './containers//Login/Login'
+import SaleCustomer from './containers/SaleCustomer/SaleCustomer'
+import ItemCategory from './containers/ItemCategory/ItemCategory'
+import Item from './containers/Item/Item'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import PrivateRoute from './containers/PrivateRoute/PrivateRoute'
+
+class App extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <Layout>
+          <Switch>
+            <Route exact 
+              path='/login' 
+              render={(props) => (
+                <Login {...props}  />
+              )}
+            
+            /> 
+            <PrivateRoute exact path='/saleCustomer' component={SaleCustomer} /> 
+            <PrivateRoute exact path='/itemCategory' component={ItemCategory} /> 
+            <PrivateRoute exact path='/item' component={Item} /> 
+
+            <Redirect from="/" to="/login" />
+
+          </Switch>
+        </Layout>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
