@@ -41,7 +41,6 @@ class Item extends Component {
                 }
             }
         )
-
     }
     getitemList= () => {
         axios.get('/api/Item/getitemlist',config).then(
@@ -128,7 +127,6 @@ class Item extends Component {
                 }
             }
         )
-
     }
    
     render(){

@@ -10,12 +10,10 @@ import mainlogo from "../../assets/icons/quest.png";
 import starticon from "../../assets/icons/start.png";
 import control from "../../assets/icons/control.png";
 import devices from "../../assets/icons/devices.png";
-
 import "../../../node_modules/font-awesome/css/font-awesome.min.css";
 import "../../assets/css/style.css";
 import "./SideNavbar.css";
 import "../../assets/css/custom.css";
-
 
 const SideNavbar = props => {
   const [left, setLeft] = useState(false);
@@ -32,7 +30,6 @@ const SideNavbar = props => {
       className="BEMSidebar navbar-nav bg-gradient-primary sidebar sidebar-dark accordion bg-blue toggled"
       id="accordionSidebar"
     >
-     
       <NavLink
         exact
         to="/home"

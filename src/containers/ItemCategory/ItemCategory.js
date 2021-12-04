@@ -99,7 +99,6 @@ class ItemCategory extends Component {
                 }
             }
         )
-
     }
    
     render(){

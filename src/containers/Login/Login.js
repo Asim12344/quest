@@ -46,7 +46,6 @@ class Login extends Component {
                         this.setState({loader:false})
                         this.props.history.push(`/saleCustomer`);
                     }
-                    
                 }
             ).catch( err => {
                     this.setState({loader:false})
@@ -94,7 +93,6 @@ class Login extends Component {
                             <div className="col-md-2">
                             </div>
                         </div>
-
                     </div>
                 </section>
             </> 
