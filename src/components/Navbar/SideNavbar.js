@@ -82,6 +82,12 @@ const SideNavbar = props => {
           <img src={control} alt="control link" />
           <span>Item</span>
         </NavLink>
+      </li>   
+      <li className={"nav-item" + (url[1] === "invoice" ? " active" : "")}>
+        <NavLink exact to="/invoice" className="BEMSidebar__sideLinks nav-link">
+          <img src={control} alt="control link" />
+          <span>Invoice</span>
+        </NavLink>
       </li>      
     </ul>
   );

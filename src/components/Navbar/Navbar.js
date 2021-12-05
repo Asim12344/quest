@@ -34,6 +34,7 @@ const Navbar = props => {
                     {url[1] === "saleCustomer" && <span>Sale Customer Information</span>}
                     {url[1] === "itemCategory" && <span>Item Category</span>}
                     {url[1] === "item" && <span>Item</span>}
+                    {url[1] === "invoice" && <span>Invoice</span>}
                     {url[1] === "login" && <span>Login Form</span>}
                 </h1>
                 {url[1] !== "login" && (

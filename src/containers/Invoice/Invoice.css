@@ -1,0 +1,13 @@
+.invoice{
+    background-color: purple;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+}
+
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

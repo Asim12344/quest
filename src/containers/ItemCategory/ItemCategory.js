@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from '../../axios';
 import * as actionCreators from '../../store/actions/index';
 import Loader from "react-loader-spinner";
-
-const config = {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-};
+import {getitemcategorylistApi, saveupdatedeleteitemcategoryApi,deleteCategoryApi} from '../../api/api'
 
 class ItemCategory extends Component {
     
@@ -24,23 +18,22 @@ class ItemCategory extends Component {
         this.getitemcategorylist()
     }
 
-    getitemcategorylist= () => {
-        axios.get('/api/ItemCategory/getitemcategorylist',config).then(
-            res => {
-                if(res.status === 200){
-                   this.setState({itemCategoryList:res.data.list})
-                }
+    getitemcategorylist= async () => {
+        try{
+            const res = await getitemcategorylistApi()
+            if(res.status === 200){
+                this.setState({itemCategoryList:res.data.list})
             }
-        ).catch( err => {
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+        }
+        catch (err){
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
             }
-        )
+        }
 
     }
 
-    saveupdatedeleteitemcategory =  (action) => { 
+    saveupdatedeleteitemcategory = async (action) => { 
         let payload = action === 'Save' ? {
             categoryName: this.state.categoryName,
             userID: localStorage.getItem('userID'),
@@ -56,49 +49,45 @@ class ItemCategory extends Component {
         }
         else{
             this.setState({loader:true})
-            axios.post('/api/ItemCategory/saveupdatedeleteitemcategory',payload,config).then(
-                res => {
-                    if(res.status === 200){
-                        this.setState({loader:false,categoryName:"" , update:false,categoryID:null})
-                        this.getitemcategorylist()
-                    }
-                    
+            try{
+                const res = await saveupdatedeleteitemcategoryApi(payload)
+                if(res.status === 200){
+                    this.setState({loader:false,categoryName:"" , update:false,categoryID:null})
+                    this.getitemcategorylist()
                 }
-            ).catch( err => {
-                    this.setState({loader:false,categoryName:"", update:false,categoryID:null})
-                    if(err.response.statusText === "Unauthorized"){
-                        this.props.logout()
-                    }
+            }
+            catch (err){
+                this.setState({loader:false,categoryName:"", update:false,categoryID:null})
+                if(err.response.statusText === "Unauthorized"){
+                    this.props.logout()
                 }
-            )
+            }
         }
     }
 
-    deleteCategory = (id) => {
+    deleteCategory = async (id) => {
         let payload = {
             categoryID:id,
             customerName: "",
             userID: localStorage.getItem('userID'),
             insertUpdateDelete: "Delete"
         }
-        axios.post('/api/ItemCategory/saveupdatedeleteitemcategory',payload,config).then(
-            res => {
-                this.setState({loader:false})
-                if(res.data.returnMessage === 'Fail'){
-                    alert('This record can not be deleted')
-                }
-                if(res.data.returnMessage === 'Success'){
-                    this.getitemcategorylist()
-                }
-                
+        try{
+            const res = await deleteCategoryApi(payload)
+            this.setState({loader:false})
+            if(res.data.returnMessage === 'Fail'){
+                alert('This record can not be deleted')
             }
-        ).catch( err => {
-                this.setState({loader:false})
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+            if(res.data.returnMessage === 'Success'){
+                this.getitemcategorylist()
             }
-        )
+        }
+        catch (err){
+            this.setState({loader:false})
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
+            }
+        }
     }
    
     render(){

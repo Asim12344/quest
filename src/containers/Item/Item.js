@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from '../../axios';
 import * as actionCreators from '../../store/actions/index';
 import Loader from "react-loader-spinner";
-
-const config = {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-};
+import {getitemcategorylistApi,getitemListApi,saveupdatedeleteitemApi,deleteItemApi} from '../../api/api'
 
 class Item extends Component {
     
@@ -28,48 +22,44 @@ class Item extends Component {
         this.getitemList()
     }
 
-    getitemcategorylist= () => {
-        axios.get('/api/ItemCategory/getitemcategorylist',config).then(
-            res => {
-                if(res.status === 200){
-                   this.setState({itemCategoryList:res.data.list})
-                }
+    getitemcategorylist= async() => {
+        try{
+            const res = await getitemcategorylistApi()
+            if(res.status === 200){
+                this.setState({itemCategoryList:res.data.list})
             }
-        ).catch( err => {
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+        }
+        catch (err){
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
             }
-        )
+        }
     }
-    getitemList= () => {
-        axios.get('/api/Item/getitemlist',config).then(
-            res => {
-                if(res.status === 200){
-                   this.setState({itemList:res.data.list})
-                }
+    getitemList= async () => {
+        try{
+            const res = await getitemListApi()
+            if(res.status === 200){
+                this.setState({itemList:res.data.list})
             }
-        ).catch( err => {
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+        }
+        catch (err){
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
             }
-        )
-
+        }
     }
 
-
-    saveupdatedeleteitem =  (action) => { 
+    saveupdatedeleteitem = async (action) => { 
         let payload = action === 'Save' ? {
             itemName: this.state.itemName,
             categoryID: parseInt(this.state.categoryID),
-            price: parseInt(this.state.price),
+            price: parseFloat(this.state.price),
             userID: localStorage.getItem('userID'),
             insertUpdateDelete: action
         }:{
             itemID:this.state.itemID,
             categoryID:parseInt(this.state.categoryID),
-            price:parseInt(this.state.price),
+            price:parseFloat(this.state.price),
             itemName: this.state.itemName,
             userID: localStorage.getItem('userID'),
             insertUpdateDelete: action
@@ -82,25 +72,23 @@ class Item extends Component {
         }
         else{
             this.setState({loader:true})
-            axios.post('/api/Item/saveupdatedeleteitem',payload,config).then(
-                res => {
-                    if(res.status === 200){
-                        this.setState({loader:false,itemName:"" ,price:0, update:false,categoryID:'Select a category id',itemID:null})
-                        this.getitemList()
-                    }
-                    
+            try{
+                const res = await saveupdatedeleteitemApi(payload)
+                if(res.status === 200){
+                    this.setState({loader:false,itemName:"" ,price:0, update:false,categoryID:'Select a category id',itemID:null})
+                    this.getitemList()
                 }
-            ).catch( err => {
-                    this.setState({loader:false,itemName:"",price:0, update:false,categoryID:'Select a category id',itemID:null})
-                    if(err.response.statusText === "Unauthorized"){
-                        this.props.logout()
-                    }
+            }
+            catch(err){
+                this.setState({loader:false,itemName:"",price:0, update:false,categoryID:'Select a category id',itemID:null})
+                if(err.response.statusText === "Unauthorized"){
+                    this.props.logout()
                 }
-            )
+            }
         }
     }
 
-    deleteItem = (id) => {
+    deleteItem = async (id) => {
         let payload = {
             itemID:id,
             categoryID:0,
@@ -109,24 +97,22 @@ class Item extends Component {
             userID: localStorage.getItem('userID'),
             insertUpdateDelete: "Delete"
         }
-        axios.post('/api/Item/saveupdatedeleteitem',payload,config).then(
-            res => {
-                this.setState({loader:false})
-                if(res.data.returnMessage === 'Fail'){
-                    alert('This record can not be deleted')
-                }
-                if(res.data.returnMessage === 'Success'){
-                    this.getitemList()
-                }
-                
+        try{
+            const res = await deleteItemApi(payload)
+            this.setState({loader:false})
+            if(res.data.returnMessage === 'Fail'){
+                alert('This record can not be deleted')
             }
-        ).catch( err => {
-                this.setState({loader:false})
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+            if(res.data.returnMessage === 'Success'){
+                this.getitemList()
             }
-        )
+        }
+        catch (err){
+            this.setState({loader:false})
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
+            }
+        }
     }
    
     render(){
@@ -150,7 +136,7 @@ class Item extends Component {
                                         <option value="Select a category id">Select a Category Id</option>
                                         {this.state.itemCategoryList.map((cat,index) => {
                                             return(
-                                                <option key={index} value={cat.categoryID}>{cat.categoryID}</option>
+                                                <option key={index} value={cat.categoryID}>{cat.categoryID}({cat.categoryName})</option>
                                             )
                                         })}
                                     </select>
@@ -185,6 +171,8 @@ class Item extends Component {
                                     <th scope="col">Item ID</th>
                                     <th scope="col">Item Name</th>
                                     <th scope="col">Category ID</th>
+                                    <th scope="col">Category Name</th>
+
                                     <th scope="col">Price</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -196,6 +184,7 @@ class Item extends Component {
                                             <th scope="row">{item.itemID}</th>
                                             <td>{item.itemName}</td>
                                             <td>{item.categoryID}</td>
+                                            <td>{item.categoryName}</td>
                                             <td>{item.price}</td>
 
                                             <td>                                                                        

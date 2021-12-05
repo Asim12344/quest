@@ -5,7 +5,7 @@ import Login from './containers//Login/Login'
 import SaleCustomer from './containers/SaleCustomer/SaleCustomer'
 import ItemCategory from './containers/ItemCategory/ItemCategory'
 import Item from './containers/Item/Item'
-
+import Invoice from './containers/Invoice/Invoice'
 import PrivateRoute from './containers/PrivateRoute/PrivateRoute'
 
 class App extends Component {
@@ -24,6 +24,7 @@ class App extends Component {
             <PrivateRoute exact path='/saleCustomer' component={SaleCustomer} /> 
             <PrivateRoute exact path='/itemCategory' component={ItemCategory} /> 
             <PrivateRoute exact path='/item' component={Item} /> 
+            <PrivateRoute exact path='/invoice' component={Invoice} /> 
 
             <Redirect from="/" to="/login" />
 

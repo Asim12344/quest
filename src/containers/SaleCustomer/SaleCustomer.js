@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from '../../axios';
 import * as actionCreators from '../../store/actions/index';
 import Loader from "react-loader-spinner";
-
-const config = {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-};
+import {getsalecustomerlistApi,saveupdatedeletesalecustomerApi,deleteCustomerApi} from '../../api/api'
 
 class SaleCustomer extends Component {
     
@@ -26,22 +20,21 @@ class SaleCustomer extends Component {
         this.getsalecustomerlist()
     }
 
-    getsalecustomerlist= () => {
-        axios.get('/api/SaleCustomer/getsalecustomerlist',config).then(
-            res => {
-                if(res.status === 200){
-                   this.setState({customerList:res.data.list})
-                }
+    getsalecustomerlist = async () => {
+        try{
+            const res = await getsalecustomerlistApi()
+            if(res.status === 200){
+                this.setState({customerList:res.data.list})
             }
-        ).catch( err => {
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+        }
+        catch(err){
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
             }
-        )
+        }
     }
 
-    saveupdatedeletesalecustomer =  (action) => { 
+    saveupdatedeletesalecustomer = async (action) => { 
         let payload = action === 'Save' ? {
             customerName: this.state.customerName,
             email: this.state.email,
@@ -70,25 +63,23 @@ class SaleCustomer extends Component {
         }
         else{
             this.setState({loader:true})
-            axios.post('/api/SaleCustomer/saveupdatedeletesalecustomer',payload,config).then(
-                res => {
-                    if(res.status === 200){
-                        this.setState({loader:false,customerName:"",email:"",address:"" , update:false,customerID:null})
-                        this.getsalecustomerlist()
-                    }
-                    
-                }
-            ).catch( err => {
+            try{
+                const res = await saveupdatedeletesalecustomerApi(payload)
+                if(res.status === 200){
                     this.setState({loader:false,customerName:"",email:"",address:"" , update:false,customerID:null})
-                    if(err.response.statusText === "Unauthorized"){
-                        this.props.logout()
-                    }
+                    this.getsalecustomerlist()
                 }
-            )
+            }
+            catch(err){
+                this.setState({loader:false,customerName:"",email:"",address:"" , update:false,customerID:null})
+                if(err.response.statusText === "Unauthorized"){
+                    this.props.logout()
+                }
+            }
         }
     }
 
-    deleteCustomer = (id) => {
+    deleteCustomer = async (id) => {
         let payload = {
             customerID:id,
             customerName: "",
@@ -97,25 +88,22 @@ class SaleCustomer extends Component {
             userID: localStorage.getItem('userID'),
             insertUpdateDelete: "Delete"
         }
-        axios.post('/api/SaleCustomer/saveupdatedeletesalecustomer',payload,config).then(
-            res => {
-                this.setState({loader:false})
-                if(res.data.returnMessage === 'Fail'){
-                    alert('This user can not be deleted')
-                }
-                if(res.data.returnMessage === 'Success'){
-                    this.getsalecustomerlist()
-                }
-                
+        try{
+            const res = await deleteCustomerApi(payload)
+            this.setState({loader:false})
+            if(res.data.returnMessage === 'Fail'){
+                alert('This user can not be deleted')
             }
-        ).catch( err => {
-                this.setState({loader:false})
-                if(err.response.statusText === "Unauthorized"){
-                    this.props.logout()
-                }
+            if(res.data.returnMessage === 'Success'){
+                this.getsalecustomerlist()
             }
-        )
-
+        }
+        catch (err){
+            this.setState({loader:false})
+            if(err.response.statusText === "Unauthorized"){
+                this.props.logout()
+            }
+        }
     }
    
     render(){
