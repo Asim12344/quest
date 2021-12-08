@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import Loader from "react-loader-spinner";
 import {getitemcategorylistApi,getitemListApi,saveupdatedeleteitemApi,deleteItemApi} from '../../api/api'
+import Select from 'react-select';
 
 class Item extends Component {
     
@@ -13,7 +14,7 @@ class Item extends Component {
         price:0,
         loader:false,
         update:false,
-        categoryID:'Select a category id',
+        categoryID:'',
         itemID:null
     }
 
@@ -26,7 +27,12 @@ class Item extends Component {
         try{
             const res = await getitemcategorylistApi()
             if(res.status === 200){
-                this.setState({itemCategoryList:res.data.list})
+                console.log(res.data.list)
+                let itemCategoryList = []
+                for(let i = 0 ; i < res.data.list.length ; i++){
+                    itemCategoryList.push({ label: res.data.list[i].categoryName, value:res.data.list[i].categoryID },)
+                }
+                this.setState({itemCategoryList:itemCategoryList})
             }
         }
         catch (err){
@@ -67,20 +73,20 @@ class Item extends Component {
         if(this.state.itemName === ""){
             alert('Please enter a itemName')
         }
-        else if(this.state.categoryID === "Select a category id"){
-            alert('Please select a category id')
+        else if(this.state.categoryID === ""){
+            alert('Please select a category ')
         }
         else{
             this.setState({loader:true})
             try{
                 const res = await saveupdatedeleteitemApi(payload)
                 if(res.status === 200){
-                    this.setState({loader:false,itemName:"" ,price:0, update:false,categoryID:'Select a category id',itemID:null})
+                    this.setState({loader:false,itemName:"" ,price:0, update:false,categoryID:'',itemID:null})
                     this.getitemList()
                 }
             }
             catch(err){
-                this.setState({loader:false,itemName:"",price:0, update:false,categoryID:'Select a category id',itemID:null})
+                this.setState({loader:false,itemName:"",price:0, update:false,categoryID:'',itemID:null})
                 if(err.response.statusText === "Unauthorized"){
                     this.props.logout()
                 }
@@ -132,15 +138,23 @@ class Item extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="exampleInputEmail1">Category ID</label>
+                                    <Select
+                                        options={this.state.itemCategoryList}
+                                        onChange={(opt) => this.setState({categoryID: opt.value})}
+                                    />
+                                </div>
+                               
+                                {/* <div className="form-group">
+                                    <label htmlFor="exampleInputEmail1">Category ID</label>
                                     <select className="form-select"  value={this.state.categoryID} onChange={(e) => this.setState({categoryID: e.target.value})}>
                                         <option value="Select a category id">Select a Category Id</option>
                                         {this.state.itemCategoryList.map((cat,index) => {
                                             return(
-                                                <option key={index} value={cat.categoryID}>{cat.categoryID}({cat.categoryName})</option>
+                                                <option key={index} value={cat.value}>{cat.value}({cat.label})</option>
                                             )
                                         })}
                                     </select>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="card-footer">
                                 {this.state.loader === true && (

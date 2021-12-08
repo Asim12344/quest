@@ -57,3 +57,16 @@ export const getinvoicelistApi = () => {
 export const getitemListByIdApi = (id) => {
     return axios.get('api/Item/getitembyid/'+id,getConfig())
 }
+
+export const deleteInvoiceApi = (payload) => {
+    return axios.delete('/api/Invoice/deleteinvoice?id='+payload.id+'&userid='+payload.userid,getConfig())
+}
+
+export const saveupdatedeleteinvoiceApi = (payload) => {
+    return axios.post('/api/Invoice/saveupdateinvoice',payload,getConfig())
+}
+
+export const getinvoicebyidApi = (no) => {
+    return axios.get('/api/Invoice/getinvoicebyid/'+no,getConfig())
+
+}
